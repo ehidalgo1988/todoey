@@ -10,9 +10,13 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
     var itemArray = ["find Mike", "buy eggos", "destroy demogorgon"]
+    let defaults = UserDefaults.standard
     override func viewDidLoad() {
         super.viewDidLoad()
-     
+//        to show the items after the app closes
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
 //mark -tableview datasource methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -46,6 +50,8 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "add item", style: .default) { (action) in
 //            what will happen once the user clicks the add item button on our alert
             self.itemArray.append(textField.text!)
+//            to persist data when the app closes
+            self.defaults.setValue(self.itemArray, forKey: "TodoListArray")
             self.tableView.reloadData()
         }
 //        add input in the box alert
